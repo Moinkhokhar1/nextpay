@@ -186,11 +186,11 @@ The backend verifies this signature before processing — tampered transactions 
 
 | Home | Send Money | Pending | History |
 |------|------------|---------|---------|
-| ![Home](screenshots/home.png) | ![Send](../../screenshots/sendmoney.png) | ![Pending](../../screenshots/pending.png) | ![History](../../screenshots/history.png) |
+| ![Home](screenshots/home.png) | ![Send](screenshots/sendmoney.png) | ![Pending](screenshots/pending.png) | ![History](screenshots/history.png) |
 
 | Login | Profile | QR Scanner | Sign Up |
 |-------|---------|------------|---------|
-| ![Login](../../screenshots/login.png) | ![Profile](../../screenshots/profile.png) | ![QR](../../screenshots/qrscan.png) | ![Register](../../screenshots/signup.png) |
+| ![Login](screenshots/login.png) | ![Profile](screenshots/profile.png) | ![QR](screenshots/qrscan.png) | ![Register](screenshots/signup.png) |
 
 ---
 
