@@ -5,9 +5,11 @@ class ApiService {
   static final Dio _dio = Dio(
     BaseOptions(
       // baseUrl: "http://localhost:8000/api",
-      // baseURL: "http://10.0.8.117:8000/api",
-      // baseUrl: "http://172.20.10.4:8000/api", //physical device
-       baseUrl: "http://10.0.2.2:8000/api",  //emulator device
+      // baseUrl: "http://10.0.8.117:8000/api",
+      baseUrl: "http://172.20.10.4:8000/api", //physical device
+      //  baseUrl: "http://10.0.9.24:8000/api",  //emulator device
+      //   0b02e7e6-a52b-4f95-a246-84c597dfe4c4
+      // ipconfig getifaddr en0
       connectTimeout: const Duration(seconds: 10),
       receiveTimeout: const Duration(seconds: 10),
     ),

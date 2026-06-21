@@ -14,6 +14,7 @@ import 'scanner_screen.dart';
 import 'pending_screen.dart';
 import 'history_screen.dart';
 import 'login_screen.dart';
+import 'dart:convert';
 
 const _bg = Color(0xFFF3EBDD);
 const _dark = Color(0xFF1A0A00);
@@ -54,6 +55,39 @@ class _HomeScreenState extends State<HomeScreen> {
       final online = results.any((r) => r != ConnectivityResult.none);
       if (mounted) setState(() => _isOnline = online);
     });
+  }
+
+  String? _resolveUserId(AuthProvider auth) {
+    final user = auth.user;
+    if (user == null) return null;
+    final walletUserId = user.wallet?.extra['user_id'];
+    if (walletUserId != null) return walletUserId.toString();
+    final userIdExtra = user.extra['user_id'];
+    if (userIdExtra != null) return userIdExtra.toString();
+    return user.id;
+  }
+
+  Future<bool> _hasBlockingState(AuthProvider auth) async {
+    // 1. Locked balance check
+    final lockedBalance = (auth.user?.wallet?.lockedBalance ?? 0).toDouble();
+    if (lockedBalance > 0) return true;
+
+    // 2. Pending offline transactions check
+    final userId = _resolveUserId(auth);
+    if (userId == null || userId.isEmpty) return false;
+
+    final pendingRaw =
+    await StorageService.getItem("pending_transactions_$userId");
+    if (pendingRaw != null) {
+      try {
+        final List<dynamic> pending = jsonDecode(pendingRaw);
+        if (pending.isNotEmpty) return true;
+      } catch (e) {
+        debugPrint("PENDING TX PARSE ERROR (logout check): $e");
+      }
+    }
+
+    return false;
   }
 
   // ✅ NEW — reads same key ProfileScreen saves to
@@ -101,6 +135,25 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<void> _handleLogout() async {
     final auth = context.read<AuthProvider>();
+
+    final blocked = await _hasBlockingState(auth);
+    if (blocked) {
+      if (mounted) {
+        _showAlert(
+          "Cannot Log Out",
+          "You have a locked balance or pending offline transactions that "
+              "need to sync first. Please connect to the internet, sync, "
+              "and try again.",
+        );
+      }else{
+        _showAlert(
+          "You Can Log Out",
+          "You Don't have any locked balance or pending offline transactions ",
+        );
+      }
+      return;
+    }
+
     await auth.logout();
     if (!mounted) return;
     Navigator.pushAndRemoveUntil(

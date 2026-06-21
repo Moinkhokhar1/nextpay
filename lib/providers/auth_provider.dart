@@ -17,6 +17,7 @@ class AuthProvider extends ChangeNotifier {
       String name,
       String email,
       String password,
+      String phone,
       ) async {
     try {
       loading = true;
@@ -24,7 +25,7 @@ class AuthProvider extends ChangeNotifier {
 
       final response = await ApiService.instance.post(
         "/auth/register",
-        data: {"name": name, "email": email, "password": password},
+        data: {"name": name, "email": email, "password": password, "phone": phone},
       );
 
       final data = response.data;

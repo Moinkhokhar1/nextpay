@@ -14,8 +14,8 @@ class Wallet {
     final balance = copy.remove('balance') ?? 0;
     final locked = copy.remove('locked_balance') ?? 0;
     return Wallet(
-      balance: balance as num,
-      lockedBalance: locked as num,
+      balance: _toNum(balance),
+      lockedBalance: _toNum(locked),
       extra: copy,
     );
   }
@@ -36,3 +36,5 @@ class Wallet {
     );
   }
 }
+num _toNum(dynamic v) =>
+    v is num ? v : num.tryParse(v.toString()) ?? 0;
